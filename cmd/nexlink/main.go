@@ -83,11 +83,14 @@ func nexlink(c *cli.Context) error {
 		return err
 	}
 
-	informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
+	_, err = informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc:    addService,
 		UpdateFunc: updateService,
 		DeleteFunc: deleteService,
 	})
+	if err != nil {
+		logger.Fatal(err.Error())
+	}
 
 	lister := svcInformer.Lister().Services(c.String("namespace"))
 
